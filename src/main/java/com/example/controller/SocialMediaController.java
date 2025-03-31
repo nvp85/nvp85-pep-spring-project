@@ -1,9 +1,11 @@
 package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.entity.*;
+import com.example.exception.UsernameAlreadyExistsException;
 import com.example.service.*;;
 
 /**
@@ -22,10 +24,20 @@ public class SocialMediaController {
         this.accountService = accountService;
     }
 
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<String> handleDuplicateUsername(UsernameAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
     @PostMapping("/register")
     @ResponseBody
-    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) {
+    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) throws UsernameAlreadyExistsException {
+        if (newAccount.getUsername().length() > 0 && newAccount.getPassword().length() >= 4) {
+            return ResponseEntity.status(400).body(null);
+        }
+
         Account account = accountService.createAccount(newAccount);
         return ResponseEntity.status(200).body(account);
+        
     }
 }
