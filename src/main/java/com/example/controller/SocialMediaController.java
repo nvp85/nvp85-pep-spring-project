@@ -26,6 +26,6 @@ public class SocialMediaController {
     @ResponseBody
     public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) {
         Account account = accountService.createAccount(newAccount);
-        return ResponseEntity.status(201).body(account);
+        return ResponseEntity.status(200).body(account);
     }
 }
