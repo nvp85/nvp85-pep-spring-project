@@ -32,7 +32,7 @@ public class SocialMediaController {
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) throws UsernameAlreadyExistsException {
-        if (newAccount.getUsername().length() > 0 && newAccount.getPassword().length() >= 4) {
+        if (newAccount.getUsername().length() == 0 && newAccount.getPassword().length() < 4) {
             return ResponseEntity.status(400).body(null);
         }
 
