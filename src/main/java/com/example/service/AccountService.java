@@ -3,7 +3,7 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.entity.*;
-import com.example.exception.UsernameAlreadyExistsException;
+import com.example.exception.*;
 import com.example.repository.AccountRepository;
 
 @Service
@@ -24,4 +24,11 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    public Account loginAccount(Account credentials) throws InvalidCredentialsException{
+        Account account = accountRepository.findAccountByUsername(credentials.getUsername());
+        if (account == null || account.getPassword() != credentials.getPassword()) {
+            throw new InvalidCredentialsException();
+        }
+        return account;
+    }
 }
