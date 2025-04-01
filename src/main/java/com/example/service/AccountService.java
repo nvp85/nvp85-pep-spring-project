@@ -26,7 +26,7 @@ public class AccountService {
 
     public Account loginAccount(Account credentials) throws InvalidCredentialsException{
         Account account = accountRepository.findAccountByUsername(credentials.getUsername());
-        if (account == null || account.getPassword() != credentials.getPassword()) {
+        if (account == null || !account.getPassword().equals(credentials.getPassword())) {
             throw new InvalidCredentialsException();
         }
         return account;
