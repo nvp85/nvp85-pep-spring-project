@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.entity.*;
+import com.example.exception.InvalidCredentialsException;
 import com.example.exception.UsernameAlreadyExistsException;
 import com.example.service.*;;
 
@@ -29,15 +30,25 @@ public class SocialMediaController {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<String> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) throws UsernameAlreadyExistsException {
         if (newAccount.getUsername().length() == 0 && newAccount.getPassword().length() < 4) {
             return ResponseEntity.status(400).body(null);
         }
-
         Account account = accountService.createAccount(newAccount);
         return ResponseEntity.status(200).body(account);
-        
+    }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<Account> loginAccount(@RequestBody Account credentials) throws InvalidCredentialsException {
+        Account account = accountService.loginAccount(credentials);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 }
