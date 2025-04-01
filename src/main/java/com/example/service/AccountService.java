@@ -8,9 +8,13 @@ import com.example.repository.AccountRepository;
 
 @Service
 public class AccountService {
+    
+    private AccountRepository accountRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     public Account createAccount(Account account) throws UsernameAlreadyExistsException{
         Account sameUsername = accountRepository.findAccountByUsername(account.getUsername());
