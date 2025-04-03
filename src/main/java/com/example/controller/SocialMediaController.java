@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.entity.*;
+import com.example.exception.BadRequestException;
 import com.example.exception.InvalidCredentialsException;
 import com.example.exception.UsernameAlreadyExistsException;
 import com.example.service.*;;
@@ -19,10 +20,12 @@ import com.example.service.*;;
 public class SocialMediaController {
 
     private AccountService accountService;
+    private MessageService messageService;
 
     @Autowired
-    public SocialMediaController(AccountService accountService) {
+    public SocialMediaController(AccountService accountService, MessageService messageService) {
         this.accountService = accountService;
+        this.messageService = messageService;
     }
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
@@ -35,11 +38,16 @@ public class SocialMediaController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequest(BadRequestException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
     @PostMapping("/register")
     @ResponseBody
-    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) throws UsernameAlreadyExistsException {
+    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) throws UsernameAlreadyExistsException, BadRequestException {
         if (newAccount.getUsername().length() == 0 && newAccount.getPassword().length() < 4) {
-            return ResponseEntity.status(400).body(null);
+            throw new BadRequestException("Invalid password or username");
         }
         Account account = accountService.createAccount(newAccount);
         return ResponseEntity.status(200).body(account);
@@ -50,5 +58,15 @@ public class SocialMediaController {
     public ResponseEntity<Account> loginAccount(@RequestBody Account credentials) throws InvalidCredentialsException {
         Account account = accountService.loginAccount(credentials);
         return ResponseEntity.status(HttpStatus.OK).body(account);
+    }
+
+    @PostMapping("/messages")
+    @ResponseBody
+    public ResponseEntity<Message> postMessage(@RequestBody Message newMessage) throws BadRequestException {
+        Message message = messageService.createMessage(newMessage);
+        if (message == null) {
+            throw new BadRequestException("Failed to create a new message");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 }
