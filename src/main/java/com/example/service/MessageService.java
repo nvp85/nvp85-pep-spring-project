@@ -3,7 +3,7 @@ package com.example.service;
 import org.springframework.stereotype.Service;
 import com.example.entity.*;
 import com.example.repository.*;
-
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,10 @@ public class MessageService {
             return messageRepository.save(newMessage);
         }
         return null;
+    }
+
+    public List<Message> getAllMessages() {
+        return messageRepository.findAll();
     }
 
 }

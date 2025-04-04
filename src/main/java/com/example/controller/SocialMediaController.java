@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +10,10 @@ import com.example.entity.*;
 import com.example.exception.BadRequestException;
 import com.example.exception.InvalidCredentialsException;
 import com.example.exception.UsernameAlreadyExistsException;
-import com.example.service.*;;
+import com.example.service.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -71,5 +76,11 @@ public class SocialMediaController {
             throw new BadRequestException("Failed to create a new message");
         }
         return ResponseEntity.status(HttpStatus.OK).body(message);
+    }
+
+    @GetMapping("/messages")
+    @ResponseBody
+    public ResponseEntity<List<Message>> getAllMessages() {
+        return ResponseEntity.status(HttpStatus.OK).body(messageService.getAllMessages());
     }
 }
