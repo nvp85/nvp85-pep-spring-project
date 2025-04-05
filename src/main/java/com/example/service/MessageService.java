@@ -41,4 +41,8 @@ public class MessageService {
         return null;
     }
 
+    public int deleteMessageById(int id) {
+        return messageRepository.deleteById(id);
+    }
+
 }

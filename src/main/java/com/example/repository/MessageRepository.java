@@ -1,7 +1,19 @@
 package com.example.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.entity.Message;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.entity.Message;
+import org.springframework.data.repository.query.Param;
+
+@Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
+    
+    @Modifying
+    @Transactional
+    @Query("delete from Message where messageId = :id")
+    int deleteById(@Param("id") int id);
 }
