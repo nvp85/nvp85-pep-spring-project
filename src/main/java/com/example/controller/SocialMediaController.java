@@ -86,7 +86,7 @@ public class SocialMediaController {
 
     @GetMapping("/messages/{messageId}")
     @ResponseBody   
-    public ResponseEntity<Message> getMessageById(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessageById(id));
+    public ResponseEntity<Message> getMessageById(@PathVariable int messageId) {
+        return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessageById(messageId));
     }
 }
