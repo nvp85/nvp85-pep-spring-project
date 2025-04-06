@@ -71,7 +71,7 @@ public class SocialMediaController {
     @ResponseBody
     public ResponseEntity<Message> postMessage(@RequestBody Message newMessage) throws BadRequestException {
         if (newMessage.getMessageText().length() == 0 || newMessage.getMessageText().length() > 255) {
-            throw new BadRequestException("Failed to create a new message");
+            throw new BadRequestException("The message text must not be empty or contain more than 255 characters.");
         }
         Message message = messageService.createMessage(newMessage);
         if (message == null) {
