@@ -53,8 +53,8 @@ public class SocialMediaController {
     @PostMapping("/register")
     @ResponseBody
     public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) throws UsernameAlreadyExistsException, BadRequestException {
-        if (newAccount.getUsername().length() == 0 && newAccount.getPassword().length() < 4) {
-            throw new BadRequestException("Invalid password or username");
+        if (newAccount.getUsername().length() == 0 || newAccount.getPassword().length() < 4) {
+            throw new BadRequestException("Password must be longer than 4 characters; username must not be blank.");
         }
         Account account = accountService.createAccount(newAccount);
         return ResponseEntity.status(200).body(account);
