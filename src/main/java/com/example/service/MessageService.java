@@ -6,6 +6,8 @@ import com.example.repository.*;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -43,6 +45,14 @@ public class MessageService {
 
     public int deleteMessageById(int id) {
         return messageRepository.deleteById(id);
+    }
+
+    public int updateMessageById(int id, String text) {
+        int affectedRows = messageRepository.updateMessageTextById(id, text);
+        if (affectedRows == 0) {
+            throw new EntityNotFoundException();
+        }
+        return affectedRows;
     }
 
 }

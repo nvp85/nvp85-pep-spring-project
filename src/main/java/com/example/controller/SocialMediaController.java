@@ -2,6 +2,8 @@ package com.example.controller;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -99,4 +101,17 @@ public class SocialMediaController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(affectedRows);
     } 
+
+    @PatchMapping("/messages/{messageId}")
+    public ResponseEntity<Integer> updateMessageById(@PathVariable int messageId, @RequestBody Message newText) throws BadRequestException{
+        if (newText.getMessageText().length() == 0 || newText.getMessageText().length() > 255) {
+            throw new BadRequestException("The message text must not be empty or contain more than 255 characters.");
+        }
+        try {
+           int affectedRows = messageService.updateMessageById(messageId, newText.getMessageText());
+           return ResponseEntity.status(HttpStatus.OK).body(affectedRows);
+        } catch(EntityNotFoundException ex) {
+            throw new BadRequestException("The message doesn't exist.");
+        }
+    }
 }
