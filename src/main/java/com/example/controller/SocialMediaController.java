@@ -73,11 +73,12 @@ public class SocialMediaController {
         if (newMessage.getMessageText().length() == 0 || newMessage.getMessageText().length() > 255) {
             throw new BadRequestException("The message text must not be empty or contain more than 255 characters.");
         }
-        Message message = messageService.createMessage(newMessage);
-        if (message == null) {
-            throw new BadRequestException("Failed to create a new message");
+        try {
+            Message message = messageService.createMessage(newMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        } catch(EntityNotFoundException ex) {
+            throw new BadRequestException("Invalid account id.");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 
     @GetMapping("/messages")
@@ -108,8 +109,8 @@ public class SocialMediaController {
             throw new BadRequestException("The message text must not be empty or contain more than 255 characters.");
         }
         try {
-           int affectedRows = messageService.updateMessageById(messageId, newText.getMessageText());
-           return ResponseEntity.status(HttpStatus.OK).body(affectedRows);
+            int affectedRows = messageService.updateMessageById(messageId, newText.getMessageText());
+            return ResponseEntity.status(HttpStatus.OK).body(affectedRows);
         } catch(EntityNotFoundException ex) {
             throw new BadRequestException("The message doesn't exist.");
         }

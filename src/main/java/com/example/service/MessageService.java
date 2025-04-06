@@ -25,10 +25,10 @@ public class MessageService {
 
     public Message createMessage(Message newMessage) {
         Optional<Account> postedBy = accountRepository.findById(newMessage.getPostedBy());
-        if (postedBy.isPresent()) {
-            return messageRepository.save(newMessage);
+        if (!postedBy.isPresent()) {
+            throw new EntityNotFoundException();
         }
-        return null;
+        return messageRepository.save(newMessage);
     }
 
     public List<Message> getAllMessages() {
