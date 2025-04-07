@@ -54,4 +54,8 @@ public class MessageService {
         return affectedRows;
     }
 
+    public List<Message> getMessagesByPostedBy(int postedBy) {
+        return messageRepository.findMessagesByPostedBy(postedBy);
+    }
+
 }

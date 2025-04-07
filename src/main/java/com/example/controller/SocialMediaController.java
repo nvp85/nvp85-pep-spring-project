@@ -109,4 +109,9 @@ public class SocialMediaController {
             throw new BadRequestException("The message doesn't exist.");
         }
     }
+
+    @GetMapping("/accounts/{accountId}/messages")
+    public ResponseEntity<List<Message>> getMessagesByPostedBy(@PathVariable int accountId) {
+        return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessagesByPostedBy(accountId));
+    }
 }

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entity.Message;
 import org.springframework.data.repository.query.Param;
+import java.util.List;
+
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Integer> {
@@ -21,4 +23,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     @Transactional
     @Query("update Message set messageText = :text where messageId = :id")
     int updateMessageTextById(@Param("id") int id, @Param("text") String text);
+
+    List<Message> findMessagesByPostedBy(Integer postedBy);
 }
