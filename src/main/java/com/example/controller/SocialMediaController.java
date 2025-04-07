@@ -51,7 +51,6 @@ public class SocialMediaController {
     }
 
     @PostMapping("/register")
-    @ResponseBody
     public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) throws UsernameAlreadyExistsException, BadRequestException {
         if (newAccount.getUsername().length() == 0 || newAccount.getPassword().length() < 4) {
             throw new BadRequestException("Password must be longer than 4 characters; username must not be blank.");
@@ -61,14 +60,12 @@ public class SocialMediaController {
     }
 
     @PostMapping("/login")
-    @ResponseBody
     public ResponseEntity<Account> loginAccount(@RequestBody Account credentials) throws InvalidCredentialsException {
         Account account = accountService.loginAccount(credentials);
         return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
     @PostMapping("/messages")
-    @ResponseBody
     public ResponseEntity<Message> postMessage(@RequestBody Message newMessage) throws BadRequestException {
         if (newMessage.getMessageText().length() == 0 || newMessage.getMessageText().length() > 255) {
             throw new BadRequestException("The message text must not be empty or contain more than 255 characters.");
@@ -82,19 +79,16 @@ public class SocialMediaController {
     }
 
     @GetMapping("/messages")
-    @ResponseBody
     public ResponseEntity<List<Message>> getAllMessages() {
         return ResponseEntity.status(HttpStatus.OK).body(messageService.getAllMessages());
     }
 
-    @GetMapping("/messages/{messageId}")
-    @ResponseBody   
+    @GetMapping("/messages/{messageId}")   
     public ResponseEntity<Message> getMessageById(@PathVariable int messageId) {
         return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessageById(messageId));
     }
 
     @DeleteMapping("/messages/{messageId}")
-    @ResponseBody
     public ResponseEntity<Integer> deleteMessageById(@PathVariable int messageId) {
         int affectedRows = messageService.deleteMessageById(messageId);
         if (affectedRows == 0) {
