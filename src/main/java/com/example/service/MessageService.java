@@ -24,8 +24,7 @@ public class MessageService {
     }
 
     public Message createMessage(Message newMessage) {
-        Optional<Account> postedBy = accountRepository.findById(newMessage.getPostedBy());
-        if (!postedBy.isPresent()) {
+        if (!accountRepository.existsById(newMessage.getPostedBy())) {
             throw new EntityNotFoundException();
         }
         return messageRepository.save(newMessage);
