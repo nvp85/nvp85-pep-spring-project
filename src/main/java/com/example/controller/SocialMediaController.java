@@ -14,8 +14,7 @@ import com.example.exception.InvalidCredentialsException;
 import com.example.exception.UsernameAlreadyExistsException;
 import com.example.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-;
+
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
